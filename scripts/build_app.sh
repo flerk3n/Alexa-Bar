@@ -77,6 +77,8 @@ rm -rf "$SP"/{typer,rich,pygments,markdown_it,mdurl,shellingham} \
 
 step "Copying helper"
 cp backend/run_helper.py "$HELPER/"
+cp LICENSE "$CONTENTS/Resources/LICENSE.txt"
+cp THIRD_PARTY_NOTICES.md "$CONTENTS/Resources/THIRD_PARTY_NOTICES.md"
 rsync -a --exclude "__pycache__" backend/alexabar_helper "$HELPER/"
 "$PY/bin/python3" -m compileall -q -j 0 "$PYLIB" "$HELPER/site-packages" "$HELPER/alexabar_helper" >/dev/null || true
 
