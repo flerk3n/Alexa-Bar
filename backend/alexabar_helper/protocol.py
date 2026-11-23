@@ -96,8 +96,11 @@ async def _serve(proto) -> None:
         task = asyncio.create_task(_handle(service, msg, emit))
         tasks.add(task)
         task.add_done_callback(tasks.discard)
-    for task in tasks:
-        task.cancel()
+    # stdin closed: let in-flight commands finish briefly, then stop.
+    if tasks:
+        _, still_running = await asyncio.wait(set(tasks), timeout=3)
+        for task in still_running:
+            task.cancel()
     await service.shutdown()
 
 
