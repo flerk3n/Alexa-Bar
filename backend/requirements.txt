@@ -1,0 +1,4 @@
+# Bundled into Alexa Bar.app by scripts/build_app.sh.
+# Pinned to the versions the app was built and checked against.
+alexapy==1.36.0
+aiohttp==3.14.5
