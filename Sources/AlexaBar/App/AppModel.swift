@@ -37,9 +37,9 @@ final class AppModel: ObservableObject {
     private var observers: [NSObjectProtocol] = []
     private var prefsSink: AnyCancellable?
 
-    init(prefs: Preferences = Preferences()) {
-        self.prefs = prefs
-        prefsSink = prefs.objectWillChange.sink { [weak self] _ in self?.objectWillChange.send() }
+    init(prefs: Preferences? = nil) {
+        self.prefs = prefs ?? Preferences()
+        prefsSink = self.prefs.objectWillChange.sink { [weak self] _ in self?.objectWillChange.send() }
         backend.onEvent = { [weak self] event in self?.handle(event: event) }
         backend.onUnexpectedExit = { [weak self] message in self?.helperCrashed(message) }
         network.onChange = { [weak self] online in self?.networkChanged(online) }
