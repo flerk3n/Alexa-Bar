@@ -283,9 +283,10 @@ class Service:
                 return {"via": "voice"}
             raise ServiceError(f"Amazon rejected the command (HTTP {status}).")
 
-        # power toggles always go through; slider-style actions coalesce
-        key = f"{entity_id}:{action}" if action.startswith("set") else f"{entity_id}:{action}:{self._ticket}"
-        return await self._coalesced(key, work)
+        # Power toggles always go through; setBrightness/setColor/... coalesce.
+        if action.startswith("set"):
+            return await self._coalesced(f"{entity_id}:{action}", work)
+        return await work()
 
     # ------------------------------------------------------------ Echo
     async def cmd_ask(self, args: dict) -> dict:
